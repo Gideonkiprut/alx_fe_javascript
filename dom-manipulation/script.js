@@ -6,7 +6,7 @@ async function fetchDataFromServer() {
     try {
         const response = await fetch(apiURL);
         const data = await response.json();
-        return data;
+        return data.slice(0, 10); // Limiting to 10 quotes for simplicity
     } catch (error) {
         console.error('Error fetching data from server:', error);
         return [];
@@ -45,6 +45,11 @@ function mergeData(localData, serverData) {
     });
 
     return localData;
+}
+
+// Initial data setup if not present
+if (!localStorage.getItem('quotes')) {
+    localStorage.setItem('quotes', JSON.stringify([]));
 }
 
 // Function to show notification
