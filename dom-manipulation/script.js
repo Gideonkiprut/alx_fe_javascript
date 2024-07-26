@@ -1,14 +1,14 @@
 // URL for the mock API
 const apiURL = 'https://jsonplaceholder.typicode.com/posts';
 
-// Function to fetch data from the server
-async function fetchDataFromServer() {
+// Function to fetch quotes from the server
+async function fetchQuotesFromServer() {
     try {
         const response = await fetch(apiURL);
         const data = await response.json();
         return data.slice(0, 10); // Limiting to 10 quotes for simplicity
     } catch (error) {
-        console.error('Error fetching data from server:', error);
+        console.error('Error fetching quotes from server:', error);
         return [];
     }
 }
@@ -63,7 +63,7 @@ function resolveConflicts() {
     // Logic to manually resolve conflicts
     console.log('User resolving conflicts manually');
     const localData = JSON.parse(localStorage.getItem('quotes')) || [];
-    fetchDataFromServer().then(serverData => {
+    fetchQuotesFromServer().then(serverData => {
         const resolvedData = promptConflictResolution(localData, serverData);
         localStorage.setItem('quotes', JSON.stringify(resolvedData));
 
@@ -82,19 +82,19 @@ function promptConflictResolution(localData, serverData) {
 
 // Periodic data fetching
 setInterval(async () => {
-    const serverData = await fetchDataFromServer();
+    const serverData = await fetchQuotesFromServer();
     syncWithLocalData(serverData);
 }, 60000); // Fetch data every minute
 
 // Initial fetch and sync
 (async function initialFetchAndSync() {
-    const serverData = await fetchDataFromServer();
+    const serverData = await fetchQuotesFromServer();
     syncWithLocalData(serverData);
 })();
 
 // Test the sync and conflict resolution functionalities
 async function testSyncAndConflictResolution() {
-    const serverData = await fetchDataFromServer();
+    const serverData = await fetchQuotesFromServer();
     const localData = JSON.parse(localStorage.getItem('quotes')) || [];
 
     console.log('Before sync:', localData);
@@ -106,3 +106,4 @@ async function testSyncAndConflictResolution() {
 }
 
 testSyncAndConflictResolution();
+
