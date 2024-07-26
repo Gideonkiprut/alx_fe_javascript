@@ -13,6 +13,22 @@ async function fetchQuotesFromServer() {
     }
 }
 
+// Function to post a new quote to the server
+async function postQuoteToServer(quote) {
+    try {
+        const response = await fetch(apiURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(quote)
+        });
+        return await response.json();
+    } catch (error) {
+        console.error('Error posting quote to server:', error);
+    }
+}
+
 // Sync local data with server data
 function syncWithLocalData(serverData) {
     const localData = JSON.parse(localStorage.getItem('quotes')) || [];
@@ -106,4 +122,16 @@ async function testSyncAndConflictResolution() {
 }
 
 testSyncAndConflictResolution();
+
+// Example usage: Posting a new quote to the server
+const newQuote = {
+    title: 'New Quote',
+    body: 'This is a new quote added by the user.',
+    userId: 1
+};
+
+postQuoteToServer(newQuote).then(response => {
+    console.log('Posted new quote to server:', response);
+});
+
 
