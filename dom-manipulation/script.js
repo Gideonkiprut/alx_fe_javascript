@@ -39,6 +39,7 @@ async function syncQuotes() {
 
     // Update local storage with merged data
     localStorage.setItem('quotes', JSON.stringify(mergedData));
+    alert("Quotes synced with server!");
     showNotification();
 }
 
@@ -113,7 +114,7 @@ async function testSyncAndConflictResolution() {
     const localData = JSON.parse(localStorage.getItem('quotes')) || [];
 
     console.log('Before sync:', localData);
-    syncQuotes();
+    await syncQuotes();
     console.log('After sync:', JSON.parse(localStorage.getItem('quotes')));
 
     // Simulate conflict and test manual resolution
@@ -131,4 +132,5 @@ const newQuote = {
 
 postQuoteToServer(newQuote).then(response => {
     console.log('Posted new quote to server:', response);
+});
 });
