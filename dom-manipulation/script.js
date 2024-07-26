@@ -29,9 +29,10 @@ async function postQuoteToServer(quote) {
     }
 }
 
-// Sync local data with server data
-function syncWithLocalData(serverData) {
+// Function to sync quotes between local storage and the server
+async function syncQuotes() {
     const localData = JSON.parse(localStorage.getItem('quotes')) || [];
+    const serverData = await fetchQuotesFromServer();
 
     // Simple conflict resolution: server data takes precedence
     const mergedData = mergeData(localData, serverData);
@@ -98,14 +99,12 @@ function promptConflictResolution(localData, serverData) {
 
 // Periodic data fetching
 setInterval(async () => {
-    const serverData = await fetchQuotesFromServer();
-    syncWithLocalData(serverData);
+    await syncQuotes();
 }, 60000); // Fetch data every minute
 
 // Initial fetch and sync
 (async function initialFetchAndSync() {
-    const serverData = await fetchQuotesFromServer();
-    syncWithLocalData(serverData);
+    await syncQuotes();
 })();
 
 // Test the sync and conflict resolution functionalities
@@ -114,7 +113,7 @@ async function testSyncAndConflictResolution() {
     const localData = JSON.parse(localStorage.getItem('quotes')) || [];
 
     console.log('Before sync:', localData);
-    syncWithLocalData(serverData);
+    syncQuotes();
     console.log('After sync:', JSON.parse(localStorage.getItem('quotes')));
 
     // Simulate conflict and test manual resolution
@@ -133,5 +132,3 @@ const newQuote = {
 postQuoteToServer(newQuote).then(response => {
     console.log('Posted new quote to server:', response);
 });
-
-
