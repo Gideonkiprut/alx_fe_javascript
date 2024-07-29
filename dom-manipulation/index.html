@@ -4,35 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dynamic Quote Generator</title>
-</head>
-<body>
-    <h1>Dynamic Quote Generator</h1>
-    <div id="quoteDisplay"></div>
-    <button id="newQuote">Show New Quote</button>
-    <div>
-        <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
-        <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
-        <button id="addQuote">Add Quote</button>
-    </div>
-    <script src="script.js"></script>
-</body>
-</html><!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Quote Generator</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <!-- Your existing HTML content -->
+
+    <!-- Search input -->
+    <input type="text" id="searchTerm" placeholder="Search quotes...">
+
+    <!-- Category filter -->
+    <select id="categoryFilter">
+        <option value="">All Categories</option>
+    </select>
+
+    <!-- Quotes container -->
+    <div id="quotesContainer"></div>
+
+    <!-- Random quote container -->
+    <div id="randomQuoteContainer"></div>
 
     <!-- Notification area -->
     <div id="notification" style="display: none;">
         Data has been updated. <button onclick="resolveConflicts()">Resolve Conflicts</button>
     </div>
 
+    <!-- Export Quotes button -->
+    <button id="exportQuotes">Export Quotes</button>
+
     <script src="script.js"></script>
 </body>
 </html>
-

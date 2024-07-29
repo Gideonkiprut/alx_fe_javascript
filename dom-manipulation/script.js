@@ -107,6 +107,7 @@ setInterval(async () => {
 (async function initialFetchAndSync() {
     await syncQuotes();
     populateCategories();
+    quoteDisplay();
 })();
 
 // Test the sync and conflict resolution functionalities
@@ -128,7 +129,8 @@ testSyncAndConflictResolution();
 const newQuote = {
     title: 'New Quote',
     body: 'This is a new quote added by the user.',
-    userId: 1
+    userId: 1,
+    category: 'Motivational'
 };
 
 postQuoteToServer(newQuote).then(response => {
@@ -173,3 +175,26 @@ function displayQuotes(quotes) {
 
 // Event listener for category filter change
 document.getElementById('categoryFilter').addEventListener('change', categoryFilter);
+
+// Display a random quote
+function quoteDisplay() {
+    const quotes = JSON.parse(localStorage.getItem('quotes')) || [];
+    if (quotes.length > 0) {
+        const randomIndex = Math.floor(Math.random() * quotes.length);
+        const randomQuote = quotes[randomIndex];
+        const randomQuoteContainer = document.getElementById('randomQuoteContainer');
+        randomQuoteContainer.innerHTML = `<h3>${randomQuote.title}</h3><p>${randomQuote.body}</p><p><strong>Category:</strong> ${randomQuote.category}</p>`;
+    }
+}
+
+// Filter quotes by search term
+function filterQuote() {
+    const searchTerm = document.getElementById('searchTerm').value.toLowerCase();
+    const quotes = JSON.parse(localStorage.getItem('quotes')) || [];
+    const filteredQuotes = quotes.filter(quote => quote.title.toLowerCase().includes(searchTerm) || quote.body.toLowerCase().includes(searchTerm));
+
+    displayQuotes(filteredQuotes);
+}
+
+// Event listener for search input
+document.getElementById('searchTerm').addEventListener('input', filterQuote);
