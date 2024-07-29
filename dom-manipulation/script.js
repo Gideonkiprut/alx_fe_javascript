@@ -252,3 +252,51 @@ function showRandomQuote() {
         randomQuoteContainer.innerHTML = `<h3>${randomQuote.title}</h3><p>${randomQuote.body}</p><p><strong>Category:</strong> ${randomQuote.category}</p>`;
     }
 }
+
+// Create add quote form
+function createAddQuoteForm() {
+    const formContainer = document.createElement('div');
+    formContainer.id = 'addQuoteFormContainer';
+
+    formContainer.innerHTML = `
+        <h3>Add New Quote</h3>
+        <form id="addQuoteForm">
+            <label for="quoteTitle">Title:</label>
+            <input type="text" id="quoteTitle" name="title" required>
+            <label for="quoteBody">Body:</label>
+            <textarea id="quoteBody" name="body" required></textarea>
+            <label for="quoteCategory">Category:</label>
+            <input type="text" id="quoteCategory" name="category" required>
+            <button type="submit">Add Quote</button>
+        </form>
+    `;
+
+    document.body.appendChild(formContainer);
+
+    document.getElementById('addQuoteForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const newQuote = {
+            title: document.getElementById('quoteTitle').value,
+            body: document.getElementById('quoteBody').value,
+            category: document.getElementById('quoteCategory').value
+        };
+
+        const quotes = JSON.parse(localStorage.getItem('quotes')) || [];
+        quotes.push(newQuote);
+        localStorage.setItem('quotes', JSON.stringify(quotes));
+        displayQuotes(quotes);
+        populateCategories();
+        alert('New quote added successfully!');
+
+        // Optionally, post the new quote to the server
+        postQuoteToServer(newQuote).then(response => {
+            console.log('Posted new quote to server:', response);
+        });
+
+        // Clear the form
+        document.getElementById('addQuoteForm').reset();
+    });
+}
+
+// Initialize add quote form
+createAddQuoteForm();
