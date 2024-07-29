@@ -1,4 +1,4 @@
-// URL for the mock API
+// URL for the mock API// URL for the mock API
 const apiURL = 'https://jsonplaceholder.typicode.com/posts';
 
 // Function to fetch quotes from the server
@@ -198,3 +198,21 @@ function filterQuote() {
 
 // Event listener for search input
 document.getElementById('searchTerm').addEventListener('input', filterQuote);
+
+// Export quotes to JSON file using Blob
+function exportQuotes() {
+    const quotes = JSON.parse(localStorage.getItem('quotes')) || [];
+    const blob = new Blob([JSON.stringify(quotes, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", url);
+    downloadAnchorNode.setAttribute("download", "quotes.json");
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+    URL.revokeObjectURL(url);
+}
+
+// Event listener for export quotes button
+document.getElementById('exportQuotes').addEventListener('click', exportQuotes);
+
