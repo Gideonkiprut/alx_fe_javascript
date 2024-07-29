@@ -108,6 +108,7 @@ setInterval(async () => {
     await syncQuotes();
     populateCategories();
     quoteDisplay();
+    showRandomQuote();
 })();
 
 // Test the sync and conflict resolution functionalities
@@ -240,3 +241,14 @@ function importQuotes(event) {
 
 // Event listener for import quotes file input
 document.getElementById('importQuotes').addEventListener('change', importQuotes);
+
+// Show a random quote
+function showRandomQuote() {
+    const quotes = JSON.parse(localStorage.getItem('quotes')) || [];
+    if (quotes.length > 0) {
+        const randomIndex = Math.floor(Math.random() * quotes.length);
+        const randomQuote = quotes[randomIndex];
+        const randomQuoteContainer = document.getElementById('randomQuoteContainer');
+        randomQuoteContainer.innerHTML = `<h3>${randomQuote.title}</h3><p>${randomQuote.body}</p><p><strong>Category:</strong> ${randomQuote.category}</p>`;
+    }
+}
