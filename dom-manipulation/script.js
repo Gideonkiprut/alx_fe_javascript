@@ -106,6 +106,7 @@ setInterval(async () => {
 // Initial fetch and sync
 (async function initialFetchAndSync() {
     await syncQuotes();
+    populateCategories();
 })();
 
 // Test the sync and conflict resolution functionalities
@@ -133,4 +134,42 @@ const newQuote = {
 postQuoteToServer(newQuote).then(response => {
     console.log('Posted new quote to server:', response);
 });
-});
+
+// Populate categories for filtering
+function populateCategories() {
+    const quotes = JSON.parse(localStorage.getItem('quotes')) || [];
+    const categories = new Set(quotes.map(quote => quote.category));
+
+    const categorySelect = document.getElementById('categoryFilter');
+    categorySelect.innerHTML = '<option value="">All Categories</option>';
+    categories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        categorySelect.appendChild(option);
+    });
+}
+
+// Filter quotes by category
+function categoryFilter() {
+    const selectedCategory = document.getElementById('categoryFilter').value;
+    const quotes = JSON.parse(localStorage.getItem('quotes')) || [];
+    const filteredQuotes = selectedCategory ? quotes.filter(quote => quote.category === selectedCategory) : quotes;
+
+    displayQuotes(filteredQuotes);
+}
+
+// Function to display quotes
+function displayQuotes(quotes) {
+    const quotesContainer = document.getElementById('quotesContainer');
+    quotesContainer.innerHTML = '';
+    quotes.forEach(quote => {
+        const quoteElement = document.createElement('div');
+        quoteElement.className = 'quote';
+        quoteElement.innerHTML = `<h3>${quote.title}</h3><p>${quote.body}</p><p><strong>Category:</strong> ${quote.category}</p>`;
+        quotesContainer.appendChild(quoteElement);
+    });
+}
+
+// Event listener for category filter change
+document.getElementById('categoryFilter').addEventListener('change', categoryFilter);
