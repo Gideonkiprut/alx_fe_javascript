@@ -1,4 +1,4 @@
-// URL for the mock API// URL for the mock API
+// URL for the mock API
 const apiURL = 'https://jsonplaceholder.typicode.com/posts';
 
 // Function to fetch quotes from the server
@@ -216,3 +216,27 @@ function exportQuotes() {
 // Event listener for export quotes button
 document.getElementById('exportQuotes').addEventListener('click', exportQuotes);
 
+// Import quotes from JSON file
+function importQuotes(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const importedQuotes = JSON.parse(e.target.result);
+                const localData = JSON.parse(localStorage.getItem('quotes')) || [];
+                const mergedData = mergeData(localData, importedQuotes);
+                localStorage.setItem('quotes', JSON.stringify(mergedData));
+                populateCategories();
+                displayQuotes(mergedData);
+                alert('Quotes imported successfully!');
+            } catch (error) {
+                alert('Error importing quotes: ' + error.message);
+            }
+        };
+        reader.readAsText(file);
+    }
+}
+
+// Event listener for import quotes file input
+document.getElementById('importQuotes').addEventListener('change', importQuotes);
